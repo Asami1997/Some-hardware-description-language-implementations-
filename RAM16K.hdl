@@ -1,0 +1,26 @@
+/**
+ * Memory of 16K registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then 
+ * the in value is loaded into the memory location specified by address 
+ * (the loaded value will be emitted to out from the next time step onward).
+ */
+// its 16k so if you think about it its just 4k*4 so 16k
+CHIP RAM16K {
+    IN in[16], load, address[14];
+    OUT out[16];
+
+    PARTS:
+	
+	DMux4Way(in=load,sel=address[12..13],a=loaded0,b=loaded1,c=loaded2,d=loaded3);
+	RAM4K(in=in,load=loaded0,address=address[0..11],out=first0);
+    RAM4K(in=in,load=loaded1,address=address[0..11],out=first1);
+    RAM4K(in=in,load=loaded2,address=address[0..11],out=first2);
+	RAM4K(in=in,load=loaded3,address=address[0..11],out=first3);
+	Mux4Way16(a=first0,b=first1,c=first2,d=first3,sel=address[12..13],out=out);  
+
+    //to choose which ram to select i used the dmux4ay with its selector as the address with last 2 bits ,and just the last 2 bits since 2 bits can represent 4 rams which is what we have here, 4 ram4k rams.
+
+    //in each ram4k teh address is just the address of the first 12 bits beacuse the represent the ram address
+
+    //At the last i used the Mux4way16 not Mux8way16 to produce the main output and the reason i used the mux4way 16 is because i have 4 ram4k rams.
+	}

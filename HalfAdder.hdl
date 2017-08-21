@@ -1,0 +1,17 @@
+// File name: projects/02/HalfAdder.hdl
+
+/**
+ * Computes the sum of two bits.
+ */
+
+CHIP HalfAdder {
+    IN a, b;    // Input pins
+    OUT sum,    // Output pin
+        carry;  // Second output pin
+
+    PARTS:
+    Xor(a=a,b=b,out=sum);    // Xor gate to add and b based on truth table
+                             //Truth table of Xor basically if two values are different output 1,else 0
+	And(a=a,b=b,out=carry);  //And gate to produce the carry of a and b based on turth table
+	                         // Truth table of And shows that only when both values are true ,output true,else false
+}

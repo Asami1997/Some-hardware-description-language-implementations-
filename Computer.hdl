@@ -1,0 +1,19 @@
+CHIP Computer {
+
+    IN reset;
+
+    PARTS:
+	
+	ROM32K(address=pc,out=instruction); //rom part of the computer will take address of instruction from program counter and pass it to cpu
+
+	CPU(inM=ahmadM,instruction=instruction,reset=reset,outM=outM,writeM=writeM,addressM=addressM,pc=pc); //cpu part of the computer
+
+	Memory(in=outM,load=writeM,address=addressM,out=ahmadM); //memory part of the computer
+
+
+}
+
+
+
+
+

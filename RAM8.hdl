@@ -1,0 +1,34 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/03/a/RAM8.hdl
+
+/**
+ * Memory of 8 registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then 
+ * the in value is loaded into the memory location specified by address 
+ * (the loaded value will be emitted to out from the next time step onward).
+ */
+
+CHIP RAM8 {
+    IN in[16], load, address[3];
+    OUT out[16];
+
+    PARTS:
+    Register(in=in,load=loaded0,out=first0); 
+	Register(in=in,load=loaded1,out=first1); 
+    Register(in=in,load=loaded2,out=first2);
+    Register(in=in,load=loaded3,out=first3);
+    Register(in=in,load=loaded4,out=first4);
+    Register(in=in,load=loaded5,out=first5);
+    Register(in=in,load=loaded6,out=first6);
+    Register(in=in,load=loaded7,out=first7);
+	DMux8Way(in=load,sel=address,a=loaded0,b=loaded1,c=loaded2,d=loaded3,e=loaded4,f=loaded5,g=loaded6,h=loaded7);
+	Mux8Way16(a=first0,b=first1,c=first2,d=first3,e=first4,f=first5,g=first6,h=first7,sel=address,out=out); //address is selector because to decided which register to output ex if selector is 0001 it will take the second one
+
+	//if you just put load= load it will change all the registers iin the ram but if you use Dmux and the address as the selector you just change the specif register your are poiting too 
+
+	
+
+	//the inputs of the mux8way are the 8 outputs of register so using the selector as the address of register we choose one of them as the  main output 
+}

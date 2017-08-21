@@ -1,0 +1,21 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/03/a/Bit.hdl
+
+/**
+ * 1-bit register:
+ * If load[t] == 1 then out[t+1] = in[t]
+ *                 else out does not change (out[t+1] = out[t])
+ */
+
+CHIP Bit {
+    IN in, load;
+    OUT out;
+
+    PARTS:
+    Mux(a=first2,b=in,sel=load,out=first1); 
+	DFF(in=first1,out=first2,out=out);
+	//Here iam using the mux to tell the dff when to draw its input from the in or from the out or in other ways when to read or write.
+    //Here the (in) in the b input because if i put (in)in a i will not be able to maintain the state of the register,it will just output the input.
+}

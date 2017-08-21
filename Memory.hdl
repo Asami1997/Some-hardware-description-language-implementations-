@@ -1,0 +1,13 @@
+CHIP Memory {
+    IN in[16], load, address[15];
+    OUT out[16];
+
+    PARTS:
+	DMux4Way(in=load, sel=address[13..14], a=first1, b=first2, c=toscreen, d=tokey);  //will choose between ram and IO and IO is furthly divided to screen and keyboard
+	Or(a=first1, b=first2, out=toram);   //will choose which to pass to ram
+    RAM16K(in=in, load=toram, address=address[0..13], out=first3);  //need 14 bits to represent ram 16k
+    Screen(in=in, load=toscreen, address=address[0..12], out=first4);  //need 13 bits to represent screen 
+    Keyboard(out=first5);
+    Mux4Way16(a=first3, b=first3, c=first4, d=first5, sel=address[13..14], out=out); //will choose which to output from 4 things // cant use mux3way so use mux4way and a abd b the same 
+
+}

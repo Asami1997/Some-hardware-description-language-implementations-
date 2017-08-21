@@ -1,0 +1,33 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/03/a/PC.hdl
+
+/**
+ * A 16-bit counter with load and reset control bits.
+ * if      (reset[t] == 1) out[t+1] = 0
+ * else if (load[t] == 1)  out[t+1] = in[t]
+ * else if (inc[t] == 1)   out[t+1] = out[t] + 1  (integer addition)
+ * else                    out[t+1] = out[t]
+ */
+
+CHIP PC {
+    IN in[16],load,inc,reset;
+    OUT out[16];
+
+    PARTS:
+    
+    Inc16(in=out4,out=incr);
+    Mux16(a=out4 ,b=incr ,sel=inc, out=out1);//increase
+    Mux16(a=out1 ,b=in ,sel=load ,out=out2);//load
+    Mux16(a=out2 ,b=false ,sel=reset ,out=out3);//reset
+  	Register(in=out3,load=true,out=out4,out=out);//resgister
+}
+/*
+*so basically it takes the input duplicates it and after that it increments one copy of it in the first step _step1
+*in the second step it chooses between wheather we enter a new input manually or we continue using the same old input _step2
+*in the third step you choose wheather you want to reset it to zero or you want to continue on with same input _step3
+*in the fourth step you store the input inside the register and make a copy of it and send one on it's way and the other back to the first step _step4
+*in conclusion it repeats itself and changes according to three decisions a loop if you will
+*
+*/

@@ -1,0 +1,30 @@
+/**
+ * Memory of 64 registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then 
+ * the in value is loaded into the memory location specified by address 
+ * (the loaded value will be emitted to out from the next time step onward).
+ */
+
+CHIP RAM64 {
+    IN in[16], load, address[6];
+    OUT out[16];
+
+    PARTS:
+	DMux8Way(in=load,sel=address[3..5],a=loaded0,b=loaded1,c=loaded2,d=loaded3,e=loaded4,f=loaded5,g=loaded6,h=loaded7);
+    RAM8(in=in,load=loaded0,address=address[0..2],out=first0);
+    RAM8(in=in,load=loaded1,address=address[0..2],out=first1);
+    RAM8(in=in,load=loaded2,address=address[0..2],out=first2);
+	RAM8(in=in,load=loaded3,address=address[0..2],out=first3);
+	RAM8(in=in,load=loaded4,address=address[0..2],out=first4);
+	RAM8(in=in,load=loaded5,address=address[0..2],out=first5);
+	RAM8(in=in,load=loaded6,address=address[0..2],out=first6);
+	RAM8(in=in,load=loaded7,address=address[0..2],out=first7);
+	Mux8Way16(a=first0,b=first1,c=first2,d=first3,e=first4,f=first5,g=first6,h=first7,sel=address[3..5],out=out);//[3..5] cuz the ram8 address 
+
+    //to choose which ram to select, i should use the dmux8way since its takes one input and output 8 outputs,  if i just put load=load in the 8 RAM8 up there i will change the hall contents of the 8 RAM8  
+    
+	//to choose which register in the ram to choose, the address in each ram8 should be  specified as the first 3 bits of the 6 address bits.
+	
+	//Then to produce 8 outputs i used mux8way since it takes 8 input and produce one output, the selector in the mux8 is the address of the last 3 bits of the address bits which refer to the ram 
+
+}
